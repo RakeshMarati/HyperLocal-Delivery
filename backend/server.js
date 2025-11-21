@@ -40,8 +40,8 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API Routes will be added here
-// app.use('/api/auth', require('./routes/authRoutes'));
+// API Routes
+app.use('/api/auth', require('./routes/authRoutes'));
 // app.use('/api/merchants', require('./routes/merchantRoutes'));
 
 // Error handling middleware (basic)
