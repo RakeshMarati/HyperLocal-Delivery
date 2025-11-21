@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -6,6 +6,8 @@ const NavigationLoader = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [prevPath, setPrevPath] = useState('');
   const location = useLocation();
+  const timeoutRef = useRef(null);
+  const maxTimeoutRef = useRef(null);
   
   // Get loading states from Redux
   const merchantsLoading = useSelector((state) => state.merchants.isLoading);
@@ -13,25 +15,77 @@ const NavigationLoader = () => {
   const ordersLoading = useSelector((state) => state.orders.isLoading);
   const authLoading = useSelector((state) => state.auth.isLoading);
 
+  // Determine which loading states are relevant for current route
+  const getRelevantLoading = (pathname) => {
+    if (pathname.startsWith('/merchants')) {
+      return merchantsLoading || productsLoading;
+    } else if (pathname.startsWith('/orders')) {
+      return ordersLoading;
+    } else if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
+      return authLoading;
+    }
+    return false;
+  };
+
   useEffect(() => {
     // Show loading when route changes
     if (location.pathname !== prevPath) {
       setIsLoading(true);
       setPrevPath(location.pathname);
+      
+      // Clear any existing timeouts
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      if (maxTimeoutRef.current) {
+        clearTimeout(maxTimeoutRef.current);
+      }
+      
+      // Maximum display time: 2 seconds (safety net)
+      maxTimeoutRef.current = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      
+      // Check if there's relevant loading
+      const relevantLoading = getRelevantLoading(location.pathname);
+      
+      if (!relevantLoading) {
+        // No loading needed - hide quickly (300ms for smooth transition)
+        timeoutRef.current = setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+      }
     }
   }, [location.pathname, prevPath]);
 
+  // Watch for loading state changes to hide loader when done
   useEffect(() => {
-    // Hide loading when all data has finished loading and page has rendered
-    if (!merchantsLoading && !productsLoading && !ordersLoading && !authLoading) {
-      // Small delay to ensure page has rendered
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 200);
-
-      return () => clearTimeout(timer);
+    if (isLoading) {
+      const relevantLoading = getRelevantLoading(location.pathname);
+      
+      if (!relevantLoading) {
+        // Loading completed - hide after short delay
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+          setIsLoading(false);
+        }, 200);
+      }
     }
-  }, [merchantsLoading, productsLoading, ordersLoading, authLoading]);
+  }, [isLoading, location.pathname, merchantsLoading, productsLoading, ordersLoading, authLoading]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      if (maxTimeoutRef.current) {
+        clearTimeout(maxTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (!isLoading) return null;
 
