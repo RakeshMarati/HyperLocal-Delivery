@@ -81,13 +81,26 @@ const HomePage = () => {
                 </div>
 
                 <div className="border-t pt-4">
+                  {address ? (
+                    <div className="mb-4">
+                      <Link to="/merchants">
+                        <Button variant="primary" size="md" className="w-full">
+                          Browse Nearby Merchants
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 text-sm mb-4 text-center">
+                      Set your location to browse nearby merchants
+                    </p>
+                  )}
                   <p className="text-gray-700 text-sm mb-4">
                     More features coming soon:
                   </p>
                   <ul className="text-left text-sm text-gray-600 space-y-2">
-                    <li>• Browse nearby merchants</li>
                     <li>• Add items to cart</li>
                     <li>• Place orders</li>
+                    <li>• Track orders in real-time</li>
                   </ul>
                 </div>
               </div>

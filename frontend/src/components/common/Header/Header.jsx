@@ -27,6 +27,11 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="flex items-center space-x-4">
+            {isAuthenticated && (
+              <Link to="/merchants" className="text-gray-700 hover:text-blue-600 text-sm font-medium">
+                Merchants
+              </Link>
+            )}
             {isAuthenticated ? (
               <>
                 <span className="text-gray-700 text-sm">
