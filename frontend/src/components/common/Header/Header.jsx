@@ -2,15 +2,18 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../../store/slices/authSlice';
+import { clearCart, selectCartItemsCount } from '../../../store/slices/cartSlice';
 import Button from '../Button/Button';
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const cartItemsCount = useSelector(selectCartItemsCount);
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearCart()); // Clear cart on logout
     navigate('/');
   };
 
@@ -28,9 +31,19 @@ const Header = () => {
           {/* Navigation */}
           <nav className="flex items-center space-x-4">
             {isAuthenticated && (
-              <Link to="/merchants" className="text-gray-700 hover:text-blue-600 text-sm font-medium">
-                Merchants
-              </Link>
+              <>
+                <Link to="/merchants" className="text-gray-700 hover:text-blue-600 text-sm font-medium">
+                  Merchants
+                </Link>
+                <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
+                  <span className="text-2xl">🛒</span>
+                  {cartItemsCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {cartItemsCount > 9 ? '9+' : cartItemsCount}
+                    </span>
+                  )}
+                </Link>
+              </>
             )}
             {isAuthenticated ? (
               <>

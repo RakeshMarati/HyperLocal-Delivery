@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchMerchantById } from '../store/thunks/merchantThunks';
 import { fetchProductsByMerchant } from '../store/thunks/productThunks';
+import { addToCart } from '../store/slices/cartSlice';
 import ProductList from '../components/product/ProductList/ProductList';
 
 const MerchantDetailPage = () => {
@@ -23,9 +24,16 @@ const MerchantDetailPage = () => {
   }, [id, dispatch]);
 
   const handleAddToCart = (product) => {
-    // TODO: Implement add to cart functionality
-    console.log('Add to cart:', product);
-    alert(`Added ${product.name} to cart! (Cart feature coming soon)`);
+    if (selectedMerchant) {
+      dispatch(addToCart({
+        product,
+        merchant: {
+          _id: selectedMerchant._id,
+          name: selectedMerchant.name,
+        },
+        quantity: 1,
+      }));
+    }
   };
 
   if (merchantLoading) {

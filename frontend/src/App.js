@@ -7,6 +7,7 @@ import SignupPage from './pages/SignupPage';
 import LocationPage from './pages/LocationPage';
 import MerchantListPage from './pages/MerchantListPage';
 import MerchantDetailPage from './pages/MerchantDetailPage';
+import CartPage from './pages/CartPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/location" element={<LocationPage />} />
           <Route path="/merchants" element={<MerchantListPage />} />
           <Route path="/merchants/:id" element={<MerchantDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
           {/* More routes will be added as we build features */}
         </Routes>
       </Layout>
