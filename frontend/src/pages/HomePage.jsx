@@ -7,6 +7,7 @@ import Button from '../components/common/Button/Button';
 const HomePage = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user, token } = useSelector((state) => state.auth);
+  const { address } = useSelector((state) => state.location);
 
   useEffect(() => {
     // If user has token but no user data, fetch current user
@@ -46,15 +47,49 @@ const HomePage = () => {
                 </p>
               </div>
               <div className="border-t pt-4">
-                <p className="text-gray-700 text-sm mb-4">
-                  You're all set! More features coming soon:
-                </p>
-                <ul className="text-left text-sm text-gray-600 space-y-2 mb-4">
-                  <li>• Set your delivery location</li>
-                  <li>• Browse nearby merchants</li>
-                  <li>• Add items to cart</li>
-                  <li>• Place orders</li>
-                </ul>
+                {/* Location Section */}
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-medium text-gray-900">
+                      Delivery Location
+                    </p>
+                    <Link to="/location">
+                      <Button variant="outline" size="sm">
+                        {address ? 'Update' : 'Set'} Location
+                      </Button>
+                    </Link>
+                  </div>
+                  {address ? (
+                    <div className="bg-gray-50 rounded-lg p-3 text-left">
+                      <p className="text-sm text-gray-700">
+                        {address.street && (
+                          <span className="block">{address.street}</span>
+                        )}
+                        <span className="block">
+                          {[address.city, address.state, address.pincode]
+                            .filter(Boolean)
+                            .join(', ')}
+                        </span>
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 italic">
+                      No location set. Set your location to browse nearby
+                      merchants.
+                    </p>
+                  )}
+                </div>
+
+                <div className="border-t pt-4">
+                  <p className="text-gray-700 text-sm mb-4">
+                    More features coming soon:
+                  </p>
+                  <ul className="text-left text-sm text-gray-600 space-y-2">
+                    <li>• Browse nearby merchants</li>
+                    <li>• Add items to cart</li>
+                    <li>• Place orders</li>
+                  </ul>
+                </div>
               </div>
             </div>
           ) : (

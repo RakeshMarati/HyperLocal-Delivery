@@ -1,4 +1,5 @@
 import { setLoading, setError, loginSuccess, registerSuccess } from '../slices/authSlice';
+import { setAddress } from '../slices/locationSlice';
 import api from '../../services/api';
 
 // Register user
@@ -65,6 +66,11 @@ export const getCurrentUser = () => async (dispatch) => {
       user: response.data,
       token: localStorage.getItem('token'),
     }));
+
+    // Sync address to location slice if available
+    if (response.data.address) {
+      dispatch(setAddress(response.data.address));
+    }
 
     return { success: true };
   } catch (error) {

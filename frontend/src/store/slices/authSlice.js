@@ -45,6 +45,11 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    updateUserAddress: (state, action) => {
+      if (state.user) {
+        state.user.address = action.payload;
+      }
+    },
   },
 });
 
@@ -55,6 +60,7 @@ export const {
   registerSuccess,
   logout,
   clearError,
+  updateUserAddress,
 } = authSlice.actions;
 
 export default authSlice.reducer;

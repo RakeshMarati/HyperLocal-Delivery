@@ -126,9 +126,51 @@ const getMe = async (req, res) => {
   }
 };
 
+// @desc    Update user address
+// @route   PUT /api/auth/address
+// @access  Private
+const updateAddress = async (req, res) => {
+  try {
+    const { street, city, state, pincode, latitude, longitude } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found',
+      });
+    }
+
+    // Update address
+    user.address = {
+      street: street || user.address?.street || '',
+      city: city || user.address?.city || '',
+      state: state || user.address?.state || '',
+      pincode: pincode || user.address?.pincode || '',
+      coordinates: {
+        latitude: latitude || user.address?.coordinates?.latitude || null,
+        longitude: longitude || user.address?.coordinates?.longitude || null,
+      },
+    };
+
+    await user.save();
+
+    res.json({
+      message: 'Address updated successfully',
+      address: user.address,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : {},
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  updateAddress,
 };
 
