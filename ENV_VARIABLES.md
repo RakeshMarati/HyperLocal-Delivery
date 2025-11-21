@@ -7,10 +7,20 @@ Copy and paste these into Render's Environment Variables section:
 ```
 PORT=5001
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
+MONGODB_URI=your-mongodb-atlas-connection-string-here
 JWT_SECRET=your-secret-key-here-generate-a-random-hex-string
 CLIENT_URL=https://your-vercel-app.vercel.app
 ```
+
+**MongoDB URI Format:**
+Get your connection string from MongoDB Atlas dashboard:
+1. Go to your cluster → Click "Connect"
+2. Select "Connect your application"
+3. Copy the connection string
+4. Replace `<password>` with your database user password
+5. Replace `<database-name>` with `hyperlocal_delivery` (or your preferred database name)
+
+The format structure: `mongodb+srv://` + `username` + `:` + `password` + `@` + `cluster-url` + `.mongodb.net/` + `database-name` + `?retryWrites=true&w=majority`
 
 **Important**: 
 - Replace `your-vercel-app.vercel.app` with your actual Vercel frontend URL after deploying

@@ -44,7 +44,7 @@ Click on **"Advanced"** → **"Add Environment Variable"** and add the following
 |-----|-------|-------------|
 | `PORT` | `5001` | Server port (Render will override this, but keep it) |
 | `NODE_ENV` | `production` | Environment mode |
-| `MONGODB_URI` | `mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority` | MongoDB Atlas connection string |
+| `MONGODB_URI` | `your-mongodb-atlas-connection-string-here` | MongoDB Atlas connection string (get from Atlas dashboard) |
 | `JWT_SECRET` | `your-secret-key-here-generate-a-random-hex-string` | JWT secret key for token signing |
 | `CLIENT_URL` | `https://your-vercel-app.vercel.app` | Your Vercel frontend URL (update after frontend deployment) |
 
@@ -142,16 +142,14 @@ Click **"Environment Variables"** and add:
 ```env
 PORT=5001
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
+MONGODB_URI=your-mongodb-atlas-connection-string-here
 JWT_SECRET=your-secret-key-here-generate-a-random-hex-string
 CLIENT_URL=https://your-vercel-app.vercel.app
 ```
 
 **Important**: Replace the placeholders with your actual values:
-- `YOUR_USERNAME`: Your MongoDB Atlas database username
-- `YOUR_PASSWORD`: Your MongoDB Atlas database password
-- `cluster0.xxxxx`: Your MongoDB Atlas cluster URL
-- `your-secret-key-here-generate-a-random-hex-string`: Generate a secure random string for JWT signing
+- `your-mongodb-atlas-connection-string-here`: Get your MongoDB Atlas connection string from your Atlas dashboard (Database → Connect → Connect your application)
+- `your-secret-key-here-generate-a-random-hex-string`: Generate a secure random string for JWT signing (use `node backend/utils/generateSecret.js` or an online generator)
 
 ### Frontend Environment Variables (Vercel)
 

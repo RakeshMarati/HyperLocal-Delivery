@@ -63,7 +63,7 @@ Replace the placeholders in your connection string:
 
 **Example of final connection string:**
 ```
-mongodb+srv://hyperlocal_admin:MyP@ssw0rd@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
+mongodb+srv://[your-username]:[your-password]@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
 ```
 
 **Note:** I added `/hyperlocal_delivery` before the `?` - this is the database name. You can use any name you like (e.g., `hyperlocal_dev`, `delivery_mvp`, etc.)

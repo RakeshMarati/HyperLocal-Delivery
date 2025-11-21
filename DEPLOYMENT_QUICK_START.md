@@ -16,10 +16,12 @@
 ```
 PORT=5001
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
+MONGODB_URI=your-mongodb-atlas-connection-string-here
 JWT_SECRET=your-secret-key-here-generate-a-random-hex-string
 CLIENT_URL=https://your-vercel-app.vercel.app
 ```
+
+**Note:** Replace `your-mongodb-atlas-connection-string-here` with your actual MongoDB Atlas connection string from your Atlas dashboard.
 
 5. **Deploy** → Copy your Render URL (e.g., `https://hyperlocal-api.onrender.com`)
 
