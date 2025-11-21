@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LocationMap from '../LocationMap/LocationMap';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
@@ -16,6 +16,16 @@ const LocationPicker = ({ onLocationConfirm, initialLocation = null }) => {
   });
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [error, setError] = useState('');
+
+  // Update coordinates when initialLocation changes
+  useEffect(() => {
+    if (initialLocation?.coordinates?.latitude && initialLocation?.coordinates?.longitude) {
+      setCoordinates({
+        latitude: initialLocation.coordinates.latitude,
+        longitude: initialLocation.coordinates.longitude,
+      });
+    }
+  }, [initialLocation]);
 
   // Get current location using browser geolocation
   const getCurrentLocation = () => {
@@ -52,8 +62,9 @@ const LocationPicker = ({ onLocationConfirm, initialLocation = null }) => {
   // Reverse geocode coordinates to address (using Nominatim - OpenStreetMap)
   const reverseGeocode = async (lat, lng) => {
     try {
+      // Request English language results
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=en`,
         {
           headers: {
             'User-Agent': 'HyperLocal-Delivery-App', // Required by Nominatim
@@ -63,10 +74,21 @@ const LocationPicker = ({ onLocationConfirm, initialLocation = null }) => {
       const data = await response.json();
 
       if (data.address) {
+        // Try to get English names, fallback to available fields
+        const city = data.address.city || 
+                     data.address.town || 
+                     data.address.village || 
+                     data.address.city_district || 
+                     '';
+        
+        const state = data.address.state || 
+                      data.address.region || 
+                      '';
+        
         setAddress({
           street: data.address.road || data.address.house_number || '',
-          city: data.address.city || data.address.town || data.address.village || '',
-          state: data.address.state || '',
+          city: city,
+          state: state,
           pincode: data.address.postcode || '',
         });
       }
@@ -108,9 +130,12 @@ const LocationPicker = ({ onLocationConfirm, initialLocation = null }) => {
     });
   };
 
+  // Calculate map center - prioritize saved coordinates
   const mapCenter = coordinates.latitude && coordinates.longitude
     ? [coordinates.latitude, coordinates.longitude]
-    : [15.8281, 78.0373]; // Default: Kurnool
+    : initialLocation?.coordinates?.latitude && initialLocation?.coordinates?.longitude
+    ? [initialLocation.coordinates.latitude, initialLocation.coordinates.longitude]
+    : [14.4758, 78.8242]; // Default: Kadapa coordinates (closer to user's location)
 
   return (
     <div className="w-full">
