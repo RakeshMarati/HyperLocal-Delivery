@@ -44,8 +44,8 @@ Click on **"Advanced"** → **"Add Environment Variable"** and add the following
 |-----|-------|-------------|
 | `PORT` | `5001` | Server port (Render will override this, but keep it) |
 | `NODE_ENV` | `production` | Environment mode |
-| `MONGODB_URI` | `mongodb+srv://rakeshmarati01_db_user:KRA6tc4VHPkIIROL@cluster0.gvlxrui.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority` | MongoDB Atlas connection string |
-| `JWT_SECRET` | `1e86a101310618d4f4be3b4d726907a5c4cb96b25a13a656ae600260eaa0ee7e` | JWT secret key for token signing |
+| `MONGODB_URI` | `mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority` | MongoDB Atlas connection string |
+| `JWT_SECRET` | `your-secret-key-here-generate-a-random-hex-string` | JWT secret key for token signing |
 | `CLIENT_URL` | `https://your-vercel-app.vercel.app` | Your Vercel frontend URL (update after frontend deployment) |
 
 **Important**: 
@@ -142,19 +142,16 @@ Click **"Environment Variables"** and add:
 ```env
 PORT=5001
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://rakeshmarati01_db_user:KRA6tc4VHPkIIROL@cluster0.gvlxrui.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
-JWT_SECRET=1e86a101310618d4f4be3b4d726907a5c4cb96b25a13a656ae600260eaa0ee7e
+MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
+JWT_SECRET=your-secret-key-here-generate-a-random-hex-string
 CLIENT_URL=https://your-vercel-app.vercel.app
 ```
 
-**Copy-paste ready values:**
-```
-PORT=5001
-NODE_ENV=production
-MONGODB_URI=mongodb+srv://rakeshmarati01_db_user:KRA6tc4VHPkIIROL@cluster0.gvlxrui.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
-JWT_SECRET=1e86a101310618d4f4be3b4d726907a5c4cb96b25a13a656ae600260eaa0ee7e
-CLIENT_URL=https://your-vercel-app.vercel.app
-```
+**Important**: Replace the placeholders with your actual values:
+- `YOUR_USERNAME`: Your MongoDB Atlas database username
+- `YOUR_PASSWORD`: Your MongoDB Atlas database password
+- `cluster0.xxxxx`: Your MongoDB Atlas cluster URL
+- `your-secret-key-here-generate-a-random-hex-string`: Generate a secure random string for JWT signing
 
 ### Frontend Environment Variables (Vercel)
 

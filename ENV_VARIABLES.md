@@ -7,8 +7,8 @@ Copy and paste these into Render's Environment Variables section:
 ```
 PORT=5001
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://rakeshmarati01_db_user:KRA6tc4VHPkIIROL@cluster0.gvlxrui.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
-JWT_SECRET=1e86a101310618d4f4be3b4d726907a5c4cb96b25a13a656ae600260eaa0ee7e
+MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
+JWT_SECRET=your-secret-key-here-generate-a-random-hex-string
 CLIENT_URL=https://your-vercel-app.vercel.app
 ```
 
