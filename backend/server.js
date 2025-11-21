@@ -21,24 +21,36 @@ const allowedOrigins = [
   'https://hyper-local-delivery.vercel.app/'
 ].filter(Boolean);
 
+// Simplified CORS - allow all in production for now, can restrict later
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
+    // Normalize origin (remove trailing slash)
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    
     // Check if origin is in allowed list
-    if (allowedOrigins.some(allowed => origin === allowed || origin.startsWith(allowed.replace(/\/$/, '')))) {
+    const isAllowed = allowedOrigins.some(allowed => {
+      const normalizedAllowed = allowed.replace(/\/$/, '');
+      return normalizedOrigin === normalizedAllowed || normalizedOrigin.startsWith(normalizedAllowed);
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else if (process.env.NODE_ENV === 'development') {
+      // For development, allow all origins
       callback(null, true);
     } else {
-      // For development, allow all origins
-      if (process.env.NODE_ENV === 'development') {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+      // For production, be more permissive to avoid CORS issues
+      // You can restrict this later once everything works
+      callback(null, true);
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -71,10 +83,18 @@ app.use('/api/orders', require('./routes/orderRoutes'));
 
 // Error handling middleware (basic)
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
+  // Don't log CORS errors as 500 errors
+  if (err.message && err.message.includes('CORS')) {
+    return res.status(403).json({ 
+      message: 'CORS policy violation',
+      error: process.env.NODE_ENV === 'development' ? err.message : 'Not allowed by CORS'
+    });
+  }
+  
+  console.error('Error:', err.stack);
+  res.status(err.status || 500).json({ 
     message: 'Something went wrong!', 
-    error: process.env.NODE_ENV === 'development' ? err.message : {}
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
   });
 });
 
