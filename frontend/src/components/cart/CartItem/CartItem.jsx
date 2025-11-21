@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../../../store/slices/cartSlice';
-import Button from '../../common/Button/Button';
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();

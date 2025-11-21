@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../../../store/thunks/authThunks';
 import { clearError } from '../../../store/slices/authSlice';
 import Input from '../../common/Input/Input';
+import PasswordInput from '../../common/PasswordInput/PasswordInput';
 import Button from '../../common/Button/Button';
 
 const LoginForm = () => {
@@ -59,9 +60,8 @@ const LoginForm = () => {
           error={error && error.includes('email') ? error : null}
         />
 
-        <Input
+        <PasswordInput
           label="Password"
-          type="password"
           name="password"
           value={formData.password}
           onChange={handleChange}

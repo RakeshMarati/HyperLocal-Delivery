@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { registerUser } from '../../../store/thunks/authThunks';
 import { clearError } from '../../../store/slices/authSlice';
+import { clearAddress } from '../../../store/slices/locationSlice';
 import Input from '../../common/Input/Input';
+import PasswordInput from '../../common/PasswordInput/PasswordInput';
 import Button from '../../common/Button/Button';
 
 const SignupForm = () => {
@@ -38,8 +40,21 @@ const SignupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setValidationError('');
+    dispatch(clearError());
 
     // Validation
+    if (!formData.name || !formData.email || !formData.password || !formData.phone) {
+      setValidationError('Please fill in all required fields including phone number');
+      return;
+    }
+
+    // Phone validation
+    const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
+      setValidationError('Please enter a valid phone number');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setValidationError('Passwords do not match');
       return;
@@ -50,11 +65,24 @@ const SignupForm = () => {
       return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setValidationError('Please enter a valid email address');
+      return;
+    }
+
     const { confirmPassword, ...userData } = formData;
+    // Clear any existing location data for new user
+    dispatch(clearAddress());
     const result = await dispatch(registerUser(userData));
     
     if (result.success) {
-      navigate('/');
+      // Redirect to location page after successful signup
+      navigate('/location');
+    } else {
+      // Error is already set in Redux state, will be displayed
+      console.error('Registration failed:', result.error);
     }
   };
 
@@ -92,17 +120,17 @@ const SignupForm = () => {
         />
 
         <Input
-          label="Phone (Optional)"
+          label="Phone Number"
           type="tel"
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          placeholder="Enter your phone number"
+          placeholder="Enter your phone number (e.g., +91 9876543210)"
+          required
         />
 
-        <Input
+        <PasswordInput
           label="Password"
-          type="password"
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -110,9 +138,8 @@ const SignupForm = () => {
           required
         />
 
-        <Input
+        <PasswordInput
           label="Confirm Password"
-          type="password"
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}

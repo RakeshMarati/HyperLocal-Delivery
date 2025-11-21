@@ -25,10 +25,14 @@ const locationSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    clearAddress: (state) => {
+      state.address = null;
+      state.error = null;
+    },
   },
 });
 
-export const { setLoading, setError, setAddress, clearError } =
+export const { setLoading, setError, setAddress, clearError, clearAddress } =
   locationSlice.actions;
 
 export default locationSlice.reducer;

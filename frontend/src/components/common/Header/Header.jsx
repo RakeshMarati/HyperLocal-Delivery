@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../../store/slices/authSlice';
 import { clearCart, selectCartItemsCount } from '../../../store/slices/cartSlice';
+import { clearAddress } from '../../../store/slices/locationSlice';
 import Button from '../Button/Button';
 
 const Header = () => {
@@ -14,6 +15,7 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearCart()); // Clear cart on logout
+    dispatch(clearAddress()); // Clear location on logout
     navigate('/');
   };
 

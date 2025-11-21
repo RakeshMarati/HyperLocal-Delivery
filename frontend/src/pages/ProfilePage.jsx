@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../store/thunks/authThunks';
 import Button from '../components/common/Button/Button';
 import Input from '../components/common/Input/Input';
+import PasswordInput from '../components/common/PasswordInput/PasswordInput';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -178,9 +179,8 @@ const ProfilePage = () => {
 
               {showPasswordFields && (
                 <div className="space-y-4">
-                  <Input
+                  <PasswordInput
                     label="Current Password"
-                    type="password"
                     name="currentPassword"
                     value={formData.currentPassword}
                     onChange={handleChange}
@@ -188,9 +188,8 @@ const ProfilePage = () => {
                     required={showPasswordFields && formData.newPassword}
                   />
 
-                  <Input
+                  <PasswordInput
                     label="New Password"
-                    type="password"
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleChange}
@@ -198,9 +197,8 @@ const ProfilePage = () => {
                     required={false}
                   />
 
-                  <Input
+                  <PasswordInput
                     label="Confirm New Password"
-                    type="password"
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}

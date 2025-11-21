@@ -18,9 +18,17 @@ const registerUser = async (req, res) => {
     const { name, email, password, phone } = req.body;
 
     // Validation
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !phone) {
       return res.status(400).json({
-        message: 'Please provide name, email, and password',
+        message: 'Please provide name, email, password, and phone number',
+      });
+    }
+
+    // Phone validation
+    const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/;
+    if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+      return res.status(400).json({
+        message: 'Please provide a valid phone number',
       });
     }
 
