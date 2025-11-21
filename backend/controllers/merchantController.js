@@ -14,9 +14,11 @@ const getMerchants = async (req, res) => {
       query.category = category;
     }
 
-    if (city) {
-      query['address.city'] = new RegExp(city, 'i'); // Case-insensitive search
-    }
+    // Location filtering disabled during testing period
+    // Uncomment below to enable location-based filtering in production
+    // if (city) {
+    //   query['address.city'] = new RegExp(city, 'i'); // Case-insensitive search
+    // }
 
     if (search) {
       query.$or = [
@@ -81,9 +83,11 @@ const getMerchantsByCategory = async (req, res) => {
       isActive: true,
     };
 
-    if (city) {
-      query['address.city'] = new RegExp(city, 'i');
-    }
+    // Location filtering disabled during testing period
+    // Uncomment below to enable location-based filtering in production
+    // if (city) {
+    //   query['address.city'] = new RegExp(city, 'i');
+    // }
 
     const merchants = await Merchant.find(query).sort({ rating: -1 });
 

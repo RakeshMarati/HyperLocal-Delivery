@@ -23,21 +23,23 @@ const MerchantListPage = () => {
 
   useEffect(() => {
     // Fetch merchants on component mount and when filters change
+    // During testing period: show all merchants regardless of location
     const currentFilters = {
       category: selectedCategory || null,
-      city: address?.city || null,
+      city: null, // Disabled during testing - show all merchants
       search: searchTerm || null,
     };
 
     dispatch(setFilters(currentFilters));
     dispatch(fetchMerchants(currentFilters));
-  }, [dispatch, selectedCategory, address, searchTerm]);
+  }, [dispatch, selectedCategory, searchTerm]);
 
   const handleSearch = (e) => {
     e.preventDefault();
+    // During testing period: show all merchants regardless of location
     const currentFilters = {
       category: selectedCategory || null,
-      city: address?.city || null,
+      city: null, // Disabled during testing - show all merchants
       search: searchTerm || null,
     };
     dispatch(setFilters(currentFilters));
@@ -48,7 +50,8 @@ const MerchantListPage = () => {
     setSearchTerm('');
     setSelectedCategory('');
     dispatch(clearFilters());
-    dispatch(fetchMerchants({ city: address?.city || null }));
+    // During testing period: show all merchants regardless of location
+    dispatch(fetchMerchants({ city: null }));
   };
 
   return (
@@ -58,19 +61,12 @@ const MerchantListPage = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Browse Merchants
           </h1>
-          {address ? (
-            <p className="text-gray-600">
-              Showing merchants in{' '}
-              <span className="font-medium">
-                {address.city}
-                {address.state && `, ${address.state}`}
-              </span>
-            </p>
-          ) : (
-            <p className="text-yellow-600 text-sm">
-              ⚠️ Set your location to see nearby merchants
-            </p>
-          )}
+          <p className="text-gray-600">
+            Showing all available merchants{' '}
+            <span className="text-sm text-gray-500">
+              (Location filtering disabled during testing)
+            </span>
+          </p>
         </div>
 
         {/* Filters */}
