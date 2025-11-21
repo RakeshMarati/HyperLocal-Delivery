@@ -32,7 +32,11 @@ export const registerUser = (userData) => async (dispatch) => {
       errorMessage = error.response.data?.message || error.response.data?.error || `Server error: ${error.response.status}`;
     } else if (error.request) {
       // Request was made but no response received
-      errorMessage = 'Unable to connect to server. Please check your internet connection and ensure the backend is running.';
+      if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+        errorMessage = 'Request timed out. The server may be starting up (this can take 30-60 seconds on free tier). Please try again in a moment.';
+      } else {
+        errorMessage = 'Unable to connect to server. Please check your internet connection and ensure the backend is running. If using Render free tier, the first request may take 30-60 seconds.';
+      }
     } else {
       // Something else happened
       errorMessage = error.message || 'An unexpected error occurred';

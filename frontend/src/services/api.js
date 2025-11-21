@@ -6,6 +6,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 60000, // 60 seconds timeout (Render free tier can take 30-60s to wake up)
 });
 
 // Request interceptor to add auth token if available
