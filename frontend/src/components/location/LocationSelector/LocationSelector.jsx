@@ -1,62 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserAddress } from '../../../store/thunks/locationThunks';
 import { clearError } from '../../../store/slices/locationSlice';
-import Input from '../../common/Input/Input';
-import Button from '../../common/Button/Button';
+import LocationPicker from '../LocationPicker/LocationPicker';
 
 const LocationSelector = ({ onSuccess }) => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.location);
   const { user } = useSelector((state) => state.auth);
 
-  const [formData, setFormData] = useState({
-    street: '',
-    city: '',
-    state: '',
-    pincode: '',
-    latitude: '',
-    longitude: '',
-  });
-
-  // Load existing address if available
-  useEffect(() => {
-    if (user?.address) {
-      setFormData({
-        street: user.address.street || '',
-        city: user.address.city || '',
-        state: user.address.state || '',
-        pincode: user.address.pincode || '',
-        latitude: user.address.coordinates?.latitude || '',
-        longitude: user.address.coordinates?.longitude || '',
-      });
-    }
-  }, [user]);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-    if (error) {
-      dispatch(clearError());
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const result = await dispatch(updateUserAddress(formData));
+  const handleLocationConfirm = async (locationData) => {
+    dispatch(clearError());
+    const result = await dispatch(updateUserAddress(locationData));
     if (result.success && onSuccess) {
       onSuccess(result.address);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-4xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
           Set Your Delivery Location
-        </h3>
+        </h2>
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -64,86 +30,19 @@ const LocationSelector = ({ onSuccess }) => {
           </div>
         )}
 
-        <Input
-          label="Street Address"
-          type="text"
-          name="street"
-          value={formData.street}
-          onChange={handleChange}
-          placeholder="Enter street address"
+        <LocationPicker
+          onLocationConfirm={handleLocationConfirm}
+          initialLocation={user?.address}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            label="City"
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            placeholder="Enter city"
-            required
-          />
-
-          <Input
-            label="State"
-            type="text"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            placeholder="Enter state"
-            required
-          />
-        </div>
-
-        <Input
-          label="Pincode"
-          type="text"
-          name="pincode"
-          value={formData.pincode}
-          onChange={handleChange}
-          placeholder="Enter pincode"
-          required
-        />
-
-        <div className="mb-4">
-          <p className="text-sm text-gray-600 mb-2">
-            Coordinates (Optional - for GPS location later)
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Latitude"
-              type="number"
-              name="latitude"
-              value={formData.latitude}
-              onChange={handleChange}
-              placeholder="e.g., 15.8281"
-              step="any"
-            />
-            <Input
-              label="Longitude"
-              type="number"
-              name="longitude"
-              value={formData.longitude}
-              onChange={handleChange}
-              placeholder="e.g., 78.0373"
-              step="any"
-            />
+        {isLoading && (
+          <div className="mt-4 text-center text-gray-600">
+            Saving location...
           </div>
-        </div>
-
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          disabled={isLoading}
-          className="w-full"
-        >
-          {isLoading ? 'Saving...' : 'Save Location'}
-        </Button>
+        )}
       </div>
-    </form>
+    </div>
   );
 };
 
 export default LocationSelector;
-

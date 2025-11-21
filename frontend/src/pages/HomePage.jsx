@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurrentUser } from '../store/thunks/authThunks';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button/Button';
+import LocationView from '../components/location/LocationView/LocationView';
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user, token } = useSelector((state) => state.auth);
   const { address } = useSelector((state) => state.location);
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     // If user has token but no user data, fetch current user
@@ -60,17 +62,36 @@ const HomePage = () => {
                     </Link>
                   </div>
                   {address ? (
-                    <div className="bg-gray-50 rounded-lg p-3 text-left">
-                      <p className="text-sm text-gray-700">
-                        {address.street && (
-                          <span className="block">{address.street}</span>
-                        )}
-                        <span className="block">
-                          {[address.city, address.state, address.pincode]
-                            .filter(Boolean)
-                            .join(', ')}
-                        </span>
-                      </p>
+                    <div>
+                      <div className="bg-gray-50 rounded-lg p-3 text-left mb-2">
+                        <p className="text-sm text-gray-700">
+                          {address.street && (
+                            <span className="block">{address.street}</span>
+                          )}
+                          <span className="block">
+                            {[address.city, address.state, address.pincode]
+                              .filter(Boolean)
+                              .join(', ')}
+                          </span>
+                        </p>
+                      </div>
+                      {address.coordinates && (
+                        <div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setShowMap(!showMap)}
+                            className="w-full mb-2"
+                          >
+                            {showMap ? 'Hide Map' : '📍 Show on Map'}
+                          </Button>
+                          {showMap && (
+                            <div className="mt-2">
+                              <LocationView address={address} height="250px" />
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <p className="text-sm text-gray-500 italic">

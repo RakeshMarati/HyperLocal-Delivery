@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import LocationPage from './pages/LocationPage';
 import MerchantListPage from './pages/MerchantListPage';
+import MerchantDetailPage from './pages/MerchantDetailPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/location" element={<LocationPage />} />
           <Route path="/merchants" element={<MerchantListPage />} />
+          <Route path="/merchants/:id" element={<MerchantDetailPage />} />
           {/* More routes will be added as we build features */}
         </Routes>
       </Layout>
