@@ -43,11 +43,11 @@ Follow these steps to set up your free MongoDB Atlas cluster for the HyperLocal 
 2. Choose **"Connect your application"**
 3. Select **"Node.js"** as the driver
 4. Select version **"5.5 or later"** (or the latest version shown)
-5. You'll see a connection string that looks like:
+5. You'll see a connection string format (example structure shown below - NOT a real connection string):
    ```
-   mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+   [connection-protocol]://[username]:[password]@[cluster-url].mongodb.net/?retryWrites=true&w=majority
    ```
-6. **Copy this connection string** - you'll need to replace `<username>` and `<password>` with your actual credentials
+6. **Copy this connection string from Atlas** - you'll need to replace the username and password placeholders with your actual credentials
 
 ## Step 6: Update Connection String
 
@@ -61,9 +61,16 @@ Replace the placeholders in your connection string:
   - `&` becomes `%26`
   - etc.
 
-**Example of final connection string:**
+**Your final connection string should include:**
+- Protocol: mongodb+srv://
+- Your username and password (from Step 3)
+- Your cluster URL (from Atlas dashboard)
+- Database name: /hyperlocal_delivery
+- Query parameters: ?retryWrites=true&w=majority
+
+**Example structure (NOT a real connection - replace with your actual values):**
 ```
-mongodb+srv://[your-username]:[your-password]@cluster0.xxxxx.mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
+[protocol]://[your-username]:[your-password]@[your-cluster-url].mongodb.net/hyperlocal_delivery?retryWrites=true&w=majority
 ```
 
 **Note:** I added `/hyperlocal_delivery` before the `?` - this is the database name. You can use any name you like (e.g., `hyperlocal_dev`, `delivery_mvp`, etc.)
