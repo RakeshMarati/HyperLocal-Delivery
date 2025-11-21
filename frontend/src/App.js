@@ -8,6 +8,9 @@ import LocationPage from './pages/LocationPage';
 import MerchantListPage from './pages/MerchantListPage';
 import MerchantDetailPage from './pages/MerchantDetailPage';
 import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderConfirmationPage from './pages/OrderConfirmationPage';
+import OrdersPage from './pages/OrdersPage';
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
           <Route path="/merchants" element={<MerchantListPage />} />
           <Route path="/merchants/:id" element={<MerchantDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/confirmation" element={<OrderConfirmationPage />} />
           {/* More routes will be added as we build features */}
         </Routes>
       </Layout>

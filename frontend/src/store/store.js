@@ -6,6 +6,7 @@ import locationReducer from './slices/locationSlice';
 import merchantReducer from './slices/merchantSlice';
 import productReducer from './slices/productSlice';
 import cartReducer from './slices/cartSlice';
+import orderReducer from './slices/orderSlice';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     merchants: merchantReducer,
     products: productReducer,
     cart: cartReducer,
+    orders: orderReducer,
     // Add more slices as we build them
   },
   // Redux Toolkit's configureStore already includes thunk middleware by default

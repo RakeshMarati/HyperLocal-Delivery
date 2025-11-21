@@ -35,6 +35,9 @@ const Header = () => {
                 <Link to="/merchants" className="text-gray-700 hover:text-blue-600 text-sm font-medium">
                   Merchants
                 </Link>
+                <Link to="/orders" className="text-gray-700 hover:text-blue-600 text-sm font-medium">
+                  Orders
+                </Link>
                 <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
                   <span className="text-2xl">🛒</span>
                   {cartItemsCount > 0 && (
