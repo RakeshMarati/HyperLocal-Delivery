@@ -20,6 +20,17 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'HyperLocal Delivery API',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health'
+    }
+  });
+});
+
 // Basic health check route
 app.get('/api/health', (req, res) => {
   res.json({ 
