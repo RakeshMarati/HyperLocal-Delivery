@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../Header/Header';
+import NavigationLoader from '../NavigationLoader/NavigationLoader';
 
 const Layout = ({ children }) => {
   return (
@@ -11,6 +12,9 @@ const Layout = ({ children }) => {
         width: '100%',
       }}
     >
+      {/* Navigation Loader */}
+      <NavigationLoader />
+      
       {/* Overlay for better content readability */}
       <div 
         className="absolute inset-0"
