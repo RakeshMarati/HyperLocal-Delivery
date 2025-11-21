@@ -62,7 +62,7 @@ Replace the placeholders in your connection string:
   - etc.
 
 **Your final connection string should include:**
-- Protocol: mongodb+srv://
+- Protocol: [mongodb+srv protocol]
 - Your username and password (from Step 3)
 - Your cluster URL (from Atlas dashboard)
 - Database name: /hyperlocal_delivery

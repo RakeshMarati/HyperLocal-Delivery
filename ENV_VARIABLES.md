@@ -20,7 +20,9 @@ Get your connection string from MongoDB Atlas dashboard:
 4. Replace `<password>` with your database user password
 5. Replace `<database-name>` with `hyperlocal_delivery` (or your preferred database name)
 
-The format structure: `mongodb+srv://` + `username` + `:` + `password` + `@` + `cluster-url` + `.mongodb.net/` + `database-name` + `?retryWrites=true&w=majority`
+The format structure: `[protocol]://` + `username` + `:` + `password` + `@` + `cluster-url` + `.mongodb.net/` + `database-name` + `?retryWrites=true&w=majority`
+
+(Protocol is `mongodb+srv` for Atlas clusters)
 
 **Important**: 
 - Replace `your-vercel-app.vercel.app` with your actual Vercel frontend URL after deploying
