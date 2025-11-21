@@ -5,7 +5,7 @@ const Order = require('../models/Order');
 // @access  Private
 const createOrder = async (req, res) => {
   try {
-    const { items, merchantId, deliveryAddress, paymentMethod } = req.body;
+    const { items, merchantId, deliveryAddress, paymentMethod, deliveryFee: providedDeliveryFee } = req.body;
 
     // Validation
     if (!items || items.length === 0) {
@@ -34,7 +34,21 @@ const createOrder = async (req, res) => {
       return sum + item.productPrice * item.quantity;
     }, 0);
 
-    const deliveryFee = 50; // Fixed delivery fee
+    // Calculate delivery fee
+    // Free delivery if subtotal is ₹100 or above
+    // 
+    // FUTURE: Distance-based pricing
+    // To implement distance-based delivery fee:
+    // 1. Get merchant location: merchant.address.coordinates (latitude, longitude)
+    // 2. Get delivery address: deliveryAddress.coordinates (latitude, longitude)
+    // 3. Calculate distance using Haversine formula or Google Maps Distance Matrix API
+    // 4. Set deliveryFee based on distance tiers (e.g., 0-2km: ₹30, 2-5km: ₹50, 5-10km: ₹80, etc.)
+    // 5. Still apply free delivery for orders above ₹100
+    //
+    // For now, use provided deliveryFee from frontend or calculate based on subtotal
+    const deliveryFee = providedDeliveryFee !== undefined 
+      ? providedDeliveryFee 
+      : (subtotal >= 100 ? 0 : 50);
     const total = subtotal + deliveryFee;
 
     // Prepare order items

@@ -50,6 +50,11 @@ const authSlice = createSlice({
         state.user.address = action.payload;
       }
     },
+    updateUserProfile: (state, action) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
   },
 });
 
@@ -61,6 +66,7 @@ export const {
   logout,
   clearError,
   updateUserAddress,
+  updateUserProfile,
 } = authSlice.actions;
 
 export default authSlice.reducer;

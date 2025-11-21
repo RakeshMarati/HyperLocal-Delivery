@@ -18,3 +18,54 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Gradient background matching the image colors - Mobile-first approach */
+.app-gradient-background {
+  /* Gradient from light grey/lavender (left) to dark navy blue (right) */
+  background: linear-gradient(
+    to right,
+    #e8eaf6 0%,      /* Light lavender/grey */
+    #c5cae9 15%,     /* Medium lavender */
+    #9fa8da 30%,      /* Light blue */
+    #7986cb 45%,      /* Medium blue */
+    #5c6bc0 60%,      /* Deeper blue */
+    #3f51b5 75%,      /* Dark blue */
+    #303f9f 90%,      /* Darker blue */
+    #1a237e 100%      /* Dark navy blue */
+  );
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+/* Add wave-like effect using pseudo-elements for depth */
+.app-gradient-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 0, 0, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Desktop: Add subtle animation for depth */
+@media (min-width: 769px) {
+  .app-gradient-background::before {
+    animation: subtleWave 20s ease-in-out infinite;
+  }
+}
+
+@keyframes subtleWave {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-10px);
+  }
+}

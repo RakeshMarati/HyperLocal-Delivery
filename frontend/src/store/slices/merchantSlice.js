@@ -30,6 +30,8 @@ const merchantSlice = createSlice({
     },
     setSelectedMerchant: (state, action) => {
       state.selectedMerchant = action.payload;
+      state.isLoading = false;
+      state.error = null;
     },
     setFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };

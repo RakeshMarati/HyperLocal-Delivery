@@ -15,12 +15,14 @@ export const fetchMerchants = (filters = {}) => async (dispatch) => {
     const response = await api.get(`/merchants?${params.toString()}`);
 
     dispatch(setMerchants(response.data.data || []));
+    dispatch(setLoading(false));
 
     return { success: true, merchants: response.data.data };
   } catch (error) {
     const errorMessage =
       error.response?.data?.message || 'Failed to fetch merchants. Please try again.';
     dispatch(setError(errorMessage));
+    dispatch(setLoading(false));
     return { success: false, error: errorMessage };
   }
 };
@@ -34,12 +36,14 @@ export const fetchMerchantById = (merchantId) => async (dispatch) => {
     const response = await api.get(`/merchants/${merchantId}`);
 
     dispatch(setSelectedMerchant(response.data.data));
+    dispatch(setLoading(false));
 
     return { success: true, merchant: response.data.data };
   } catch (error) {
     const errorMessage =
       error.response?.data?.message || 'Failed to fetch merchant. Please try again.';
     dispatch(setError(errorMessage));
+    dispatch(setLoading(false));
     return { success: false, error: errorMessage };
   }
 };
@@ -54,12 +58,14 @@ export const fetchMerchantsByCategory = (category, city = null) => async (dispat
     const response = await api.get(`/merchants/category/${category}${params}`);
 
     dispatch(setMerchants(response.data.data || []));
+    dispatch(setLoading(false));
 
     return { success: true, merchants: response.data.data };
   } catch (error) {
     const errorMessage =
       error.response?.data?.message || 'Failed to fetch merchants. Please try again.';
     dispatch(setError(errorMessage));
+    dispatch(setLoading(false));
     return { success: false, error: errorMessage };
   }
 };

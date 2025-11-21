@@ -24,7 +24,8 @@ const CartSummary = ({ onCheckout }) => {
     return acc;
   }, {});
 
-  const deliveryFee = 50; // Fixed delivery fee (can be made dynamic later)
+  // Free delivery if cart total is above ₹100
+  const deliveryFee = cartTotal >= 100 ? 0 : 50;
   const grandTotal = cartTotal + deliveryFee;
 
   return (
@@ -53,8 +54,24 @@ const CartSummary = ({ onCheckout }) => {
         </div>
         <div className="flex justify-between text-sm text-gray-600">
           <span>Delivery Fee</span>
-          <span>₹{deliveryFee.toFixed(2)}</span>
+          <span>
+            {deliveryFee === 0 ? (
+              <span className="text-green-600 font-semibold">FREE</span>
+            ) : (
+              `₹${deliveryFee.toFixed(2)}`
+            )}
+          </span>
         </div>
+        {cartTotal >= 100 && (
+          <p className="text-xs text-green-600 mt-1">
+            🎉 Free delivery on orders above ₹100!
+          </p>
+        )}
+        {cartTotal < 100 && (
+          <p className="text-xs text-gray-500 mt-1">
+            Add ₹{(100 - cartTotal).toFixed(2)} more for free delivery
+          </p>
+        )}
         <div className="border-t pt-2 flex justify-between text-lg font-bold text-gray-900">
           <span>Total</span>
           <span className="text-blue-600">₹{grandTotal.toFixed(2)}</span>

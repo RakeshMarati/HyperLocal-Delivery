@@ -7,28 +7,39 @@ const CartItem = ({ item }) => {
   const dispatch = useDispatch();
 
   const handleRemove = () => {
-    dispatch(removeFromCart({
-      productId: item.product._id,
-      merchantId: item.merchant._id,
-    }));
+    if (window.confirm(`Remove "${item.product.name}" from cart?`)) {
+      dispatch(removeFromCart({
+        productId: item.product._id,
+        merchantId: item.merchant._id,
+      }));
+    }
   };
 
-  const handleQuantityChange = (newQuantity) => {
-    if (newQuantity > 0) {
+  const handleDecrease = () => {
+    if (item.quantity > 1) {
       dispatch(updateQuantity({
         productId: item.product._id,
         merchantId: item.merchant._id,
-        quantity: newQuantity,
+        quantity: item.quantity - 1,
       }));
     } else {
+      // If quantity is 1, remove the item
       handleRemove();
     }
+  };
+
+  const handleIncrease = () => {
+    dispatch(updateQuantity({
+      productId: item.product._id,
+      merchantId: item.merchant._id,
+      quantity: item.quantity + 1,
+    }));
   };
 
   const itemTotal = item.product.price * item.quantity;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+    <div className="bg-white rounded-lg shadow-md p-4 mb-4 hover:shadow-lg transition-shadow">
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Product Image */}
         <div className="w-full sm:w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -46,56 +57,73 @@ const CartItem = ({ item }) => {
         {/* Product Details */}
         <div className="flex-1">
           <div className="flex justify-between items-start mb-2">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">
                 {item.product.name}
               </h3>
-              <p className="text-sm text-gray-600">
-                From: {item.merchant.name}
+              <p className="text-sm text-gray-600 mb-1">
+                From: <span className="font-medium">{item.merchant.name}</span>
               </p>
+              {item.product.description && (
+                <p className="text-sm text-gray-500 line-clamp-1">
+                  {item.product.description}
+                </p>
+              )}
             </div>
-            <Button
-              variant="danger"
-              size="sm"
+            <button
               onClick={handleRemove}
+              className="ml-4 text-red-600 hover:text-red-800 hover:bg-red-50 p-2 rounded-full transition-colors"
+              title="Remove item"
             >
-              Remove
-            </Button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
           </div>
 
-          {item.product.description && (
-            <p className="text-sm text-gray-600 mb-2 line-clamp-1">
-              {item.product.description}
-            </p>
-          )}
-
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-4">
+            {/* Quantity Controls */}
             <div className="flex items-center space-x-3">
-              <span className="text-sm text-gray-600">Quantity:</span>
-              <div className="flex items-center border border-gray-300 rounded-lg">
+              <span className="text-sm font-medium text-gray-700">Quantity:</span>
+              <div className="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden">
                 <button
-                  onClick={() => handleQuantityChange(item.quantity - 1)}
-                  className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                  onClick={handleDecrease}
+                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={item.quantity <= 1}
+                  title="Decrease quantity"
                 >
                   −
                 </button>
-                <span className="px-4 py-1 text-gray-900 font-medium">
+                <span className="px-6 py-2 text-gray-900 font-bold text-lg min-w-[3rem] text-center bg-gray-50">
                   {item.quantity}
                 </span>
                 <button
-                  onClick={() => handleQuantityChange(item.quantity + 1)}
-                  className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                  onClick={handleIncrease}
+                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors font-semibold"
+                  title="Increase quantity"
                 >
                   +
                 </button>
               </div>
             </div>
 
+            {/* Price */}
             <div className="text-right">
-              <p className="text-sm text-gray-600">
-                ₹{item.product.price.toFixed(2)} × {item.quantity}
+              <p className="text-sm text-gray-600 mb-1">
+                ₹{item.product.price.toFixed(2)} × {item.quantity} {item.product.unit || 'piece'}
               </p>
-              <p className="text-lg font-bold text-blue-600">
+              <p className="text-xl font-bold text-blue-600">
                 ₹{itemTotal.toFixed(2)}
               </p>
             </div>

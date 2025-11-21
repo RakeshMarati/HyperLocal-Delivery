@@ -11,6 +11,7 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import OrdersPage from './pages/OrdersPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/confirmation" element={<OrderConfirmationPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           {/* More routes will be added as we build features */}
         </Routes>
       </Layout>

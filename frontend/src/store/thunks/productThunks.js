@@ -16,12 +16,14 @@ export const fetchProductsByMerchant = (merchantId, filters = {}) => async (disp
     );
 
     dispatch(setProducts({ products: response.data.data || [], merchantId }));
+    dispatch(setLoading(false));
 
     return { success: true, products: response.data.data };
   } catch (error) {
     const errorMessage =
       error.response?.data?.message || 'Failed to fetch products. Please try again.';
     dispatch(setError(errorMessage));
+    dispatch(setLoading(false));
     return { success: false, error: errorMessage };
   }
 };
@@ -35,12 +37,14 @@ export const fetchProductById = (productId) => async (dispatch) => {
     const response = await api.get(`/products/${productId}`);
 
     dispatch(setSelectedProduct(response.data.data));
+    dispatch(setLoading(false));
 
     return { success: true, product: response.data.data };
   } catch (error) {
     const errorMessage =
       error.response?.data?.message || 'Failed to fetch product. Please try again.';
     dispatch(setError(errorMessage));
+    dispatch(setLoading(false));
     return { success: false, error: errorMessage };
   }
 };

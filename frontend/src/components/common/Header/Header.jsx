@@ -22,7 +22,12 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo/Brand */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center space-x-3">
+            <img
+              src="https://ik.imagekit.io/aazn022r8/Logo-Image%20(1).png"
+              alt="HyperLocal Delivery Logo"
+              className="h-12 w-auto object-contain"
+            />
             <h1 className="text-2xl font-bold text-blue-600">
               HyperLocal Delivery
             </h1>
@@ -50,6 +55,9 @@ const Header = () => {
             )}
             {isAuthenticated ? (
               <>
+                <Link to="/profile" className="text-gray-700 hover:text-blue-600 text-sm font-medium">
+                  Profile
+                </Link>
                 <span className="text-gray-700 text-sm">
                   Welcome, <span className="font-semibold">{user?.name}</span>
                 </span>

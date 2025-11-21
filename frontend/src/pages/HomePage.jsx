@@ -26,7 +26,7 @@ const HomePage = () => {
             Welcome to HyperLocal Delivery
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Your local delivery platform for Kurnool
+            Your local delivery platform
           </p>
 
           {isAuthenticated && user ? (
@@ -73,6 +73,12 @@ const HomePage = () => {
                               .filter(Boolean)
                               .join(', ')}
                           </span>
+                          {user?.phone && (
+                            <span className="block mt-2">
+                              <span className="font-medium">📱 Phone: </span>
+                              {user.phone}
+                            </span>
+                          )}
                         </p>
                       </div>
                       {address.coordinates && (
@@ -87,7 +93,7 @@ const HomePage = () => {
                           </Button>
                           {showMap && (
                             <div className="mt-2">
-                              <LocationView address={address} height="250px" />
+                              <LocationView address={{ ...address, phone: user?.phone }} height="250px" />
                             </div>
                           )}
                         </div>
@@ -115,14 +121,35 @@ const HomePage = () => {
                       Set your location to browse nearby merchants
                     </p>
                   )}
-                  <p className="text-gray-700 text-sm mb-4">
-                    More features coming soon:
-                  </p>
-                  <ul className="text-left text-sm text-gray-600 space-y-2">
-                    <li>• Add items to cart</li>
-                    <li>• Place orders</li>
-                    <li>• Track orders in real-time</li>
-                  </ul>
+                  
+                  {/* Available Features */}
+                  <div className="mb-4">
+                    <p className="text-gray-700 text-sm font-semibold mb-2">
+                      ✅ Available Features:
+                    </p>
+                    <ul className="text-left text-sm text-gray-600 space-y-1">
+                      <li>• Browse merchants by category</li>
+                      <li>• Add items to cart & manage quantities</li>
+                      <li>• Place orders with COD payment</li>
+                      <li>• View order history</li>
+                      <li>• Edit profile & update location</li>
+                      <li>• Free delivery on orders above ₹100</li>
+                    </ul>
+                  </div>
+
+                  {/* Coming Soon Features */}
+                  <div>
+                    <p className="text-gray-700 text-sm font-semibold mb-2">
+                      🚀 Coming Soon:
+                    </p>
+                    <ul className="text-left text-sm text-gray-500 space-y-1">
+                      <li>• Real-time order tracking</li>
+                      <li>• Online payment integration</li>
+                      <li>• Order cancellation & refunds</li>
+                      <li>• Product reviews & ratings</li>
+                      <li>• Distance-based delivery pricing</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

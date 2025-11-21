@@ -13,6 +13,7 @@ const CheckoutPage = () => {
   const items = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
   const { address } = useSelector((state) => state.location);
+  const { user } = useSelector((state) => state.auth);
   const { isLoading, error } = useSelector((state) => state.orders);
 
   const [paymentMethod, setPaymentMethod] = useState('cod');
@@ -33,7 +34,8 @@ const CheckoutPage = () => {
     return acc;
   }, {});
 
-  const deliveryFee = 50;
+  // Free delivery if cart total is above ₹100
+  const deliveryFee = cartTotal >= 100 ? 0 : 50;
   const grandTotal = cartTotal + deliveryFee;
 
   const handlePlaceOrder = async () => {
@@ -59,6 +61,7 @@ const CheckoutPage = () => {
         merchantId: group.merchant._id,
         deliveryAddress: address,
         paymentMethod,
+        deliveryFee: group.subtotal >= 100 ? 0 : 50, // Pass delivery fee to backend
       };
 
       return dispatch(createOrder(orderData));
@@ -128,9 +131,15 @@ const CheckoutPage = () => {
                           .filter(Boolean)
                           .join(', ')}
                       </span>
+                      {user?.phone && (
+                        <span className="block mt-2">
+                          <span className="font-medium">📱 Phone: </span>
+                          {user.phone}
+                        </span>
+                      )}
                     </p>
                   </div>
-                  <LocationView address={address} height="200px" />
+                  <LocationView address={{ ...address, phone: user?.phone }} height="200px" />
                   <Button
                     variant="outline"
                     size="sm"
@@ -248,10 +257,21 @@ const CheckoutPage = () => {
                   <span>Items ({items.length})</span>
                   <span>₹{cartTotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Delivery Fee</span>
-                  <span>₹{deliveryFee.toFixed(2)}</span>
-                </div>
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>Delivery Fee</span>
+                      <span>
+                        {deliveryFee === 0 ? (
+                          <span className="text-green-600 font-semibold">FREE</span>
+                        ) : (
+                          `₹${deliveryFee.toFixed(2)}`
+                        )}
+                      </span>
+                    </div>
+                    {cartTotal >= 100 && (
+                      <p className="text-xs text-green-600 mt-1">
+                        🎉 Free delivery on orders above ₹100!
+                      </p>
+                    )}
                 <div className="border-t pt-2 flex justify-between text-lg font-bold text-gray-900">
                   <span>Total</span>
                   <span className="text-blue-600">₹{grandTotal.toFixed(2)}</span>

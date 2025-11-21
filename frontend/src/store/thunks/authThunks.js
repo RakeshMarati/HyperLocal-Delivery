@@ -1,4 +1,4 @@
-import { setLoading, setError, loginSuccess, registerSuccess } from '../slices/authSlice';
+import { setLoading, setError, loginSuccess, registerSuccess, updateUserProfile } from '../slices/authSlice';
 import { setAddress } from '../slices/locationSlice';
 import api from '../../services/api';
 
@@ -76,6 +76,26 @@ export const getCurrentUser = () => async (dispatch) => {
   } catch (error) {
     dispatch(setError(null));
     return { success: false };
+  }
+};
+
+// Update user profile
+export const updateProfile = (profileData) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+
+    const response = await api.put('/auth/profile', profileData);
+
+    dispatch(updateUserProfile(response.data.user));
+    dispatch(setLoading(false));
+
+    return { success: true, user: response.data.user };
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || 'Failed to update profile. Please try again.';
+    dispatch(setError(errorMessage));
+    dispatch(setLoading(false));
+    return { success: false, error: errorMessage };
   }
 };
 
